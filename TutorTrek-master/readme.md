@@ -7,7 +7,7 @@ The project is a comprehensive online learning platform that connects teachers a
 1. Clone the repository:
 
    ```shell
-   git clone https://github.com/abinth11/TutorTrek.git
+   git clone https://github.com/TejaSri128/Tutoring-platform/tree/main/TutorTrek-master
    ```
 
 2. Navigate to the project directory:
