@@ -170,9 +170,6 @@ For any questions, feedback, or inquiries, please reach out to:
 
 - Rajulapati Tejasri
    - Email: rajulapatiteja2005@gmail.com
-- Abin T H
-   - Email: abinth250@example.com
-   - LinkedIn: [linkedin-profile](https://www.linkedin.com/in/abin-th-170676245/)
 
 ## Design Files and API Documentation
 
