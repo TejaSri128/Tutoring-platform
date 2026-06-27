@@ -11,9 +11,10 @@ export const getAllStudentsU = async (
   const students:StudentInterface[]|null = await studentRepository.getAllStudents();
   await Promise.all(
     students.map(async (student) => {
-      if (student?.profilePic?.key) {
-        student.profileUrl = ""
-        student.profileUrl = await cloudService.getFile(student.profilePic.key);
+      if (student?.profilePic) {
+        student.profileUrl = await cloudService.getFile(
+          student.profilePic.key ?? student.profilePic.url ?? ''
+        );
       }
     })
   );
@@ -62,9 +63,10 @@ export const getAllBlockedStudentsU = async (
   const blockedStudents:StudentInterface[]|null = await studentRepository.getAllBlockedStudents();
   await Promise.all(
     blockedStudents.map(async (student) => {
-      if (student?.profilePic?.key) {
-        student.profileUrl = ""
-        student.profileUrl = await cloudService.getFile(student.profilePic.key);
+      if (student?.profilePic) {
+        student.profileUrl = await cloudService.getFile(
+          student.profilePic.key ?? student.profilePic.url ?? ''
+        );
       }
     })
   );

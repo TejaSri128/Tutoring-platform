@@ -4,8 +4,9 @@ import { PaymentServiceInterface } from '../../../app/services/paymentServiceInt
 import { CourseDbRepositoryInterface } from '../../../app/repositories/courseDbRepository';
 
 export const createPaymentIntentU = async (
-  courseId:string,
-  courseDbRepository:ReturnType<CourseDbRepositoryInterface>,
+  courseId: string,
+  studentId: string,
+  courseDbRepository: ReturnType<CourseDbRepositoryInterface>,
   paymentService: ReturnType<PaymentServiceInterface>
 ) => {
   if (!courseId) {
@@ -25,7 +26,7 @@ export const createPaymentIntentU = async (
       HttpStatusCodes.INTERNAL_SERVER_ERROR
     );
   }
-  const response = await paymentService.createPaymentIntent(price);
+  const response = await paymentService.createPaymentIntent(price, courseId, studentId);
   return response;
 };
 

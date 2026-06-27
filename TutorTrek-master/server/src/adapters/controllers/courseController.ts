@@ -49,6 +49,10 @@ import { searchCourseU } from '../../app/usecases/course/search';
 import { CacheRepositoryInterface } from '@src/app/repositories/cachedRepoInterface';
 import { RedisRepositoryImpl } from '@src/frameworks/database/redis/redisCacheRepository';
 import { RedisClient } from '@src/app';
+import { ReviewDbInterface } from '../../app/repositories/reviewDbRepository';
+import { ReviewRepositoryMongoDB } from '../../frameworks/database/mongodb/repositories/reviewRepoMongoDb';
+import { rateCourseU } from '../../app/usecases/course/rateCourseU';
+import { getCourseReviewsU } from '../../app/usecases/course/getCourseReviewsU';
 
 const courseController = (
   cloudServiceInterface: CloudServiceInterface,
@@ -65,7 +69,9 @@ const courseController = (
   paymentDbRepositoryImpl: PaymentImplInterface,
   cacheDbRepository: CacheRepositoryInterface,
   cacheDbRepositoryImpl: RedisRepositoryImpl,
-  cacheClient: RedisClient
+  cacheClient: RedisClient,
+  reviewDbInterface: ReviewDbInterface,
+  reviewDbImpl: ReviewRepositoryMongoDB
 ) => {
   const dbRepositoryCourse = courseDbRepository(courseDbRepositoryImpl());
   const cloudService = cloudServiceInterface(cloudServiceImpl());
@@ -78,6 +84,7 @@ const courseController = (
   const dbRepositoryCache = cacheDbRepository(
     cacheDbRepositoryImpl(cacheClient)
   );
+  const dbRepositoryReview = reviewDbInterface(reviewDbImpl());
 
   const addCourse = asyncHandler(
     async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -258,6 +265,10 @@ const courseController = (
         discussion,
         dbRepositoryDiscussion
       );
+      const io = req.app.get('io');
+      if (io) {
+        io.emit('discussion_updated');
+      }
       res.status(200).json({
         status: 'success',
         message: 'Successfully posted your comment',
@@ -285,6 +296,10 @@ const courseController = (
     const discussionId: string = req.params.discussionId;
     const message: string = req.body.message;
     await editDiscussionU(discussionId, message, dbRepositoryDiscussion);
+    const io = req.app.get('io');
+    if (io) {
+      io.emit('discussion_updated');
+    }
     res.status(200).json({
       status: 'success',
       message: 'Successfully edited your comment',
@@ -295,6 +310,10 @@ const courseController = (
   const deleteDiscussion = asyncHandler(async (req: Request, res: Response) => {
     const discussionId: string = req.params.discussionId;
     await deleteDiscussionByIdU(discussionId, dbRepositoryDiscussion);
+    const io = req.app.get('io');
+    if (io) {
+      io.emit('discussion_updated');
+    }
     res.status(200).json({
       status: 'success',
       message: 'Successfully deleted your comment',
@@ -306,6 +325,10 @@ const courseController = (
     const discussionId: string = req.params.discussionId;
     const reply = req.body.reply;
     await replyDiscussionU(discussionId, reply, dbRepositoryDiscussion);
+    const io = req.app.get('io');
+    if (io) {
+      io.emit('discussion_updated');
+    }
     res.status(200).json({
       status: 'success',
       message: 'Successfully replied to a comment',
@@ -421,6 +444,35 @@ const courseController = (
     });
   });
 
+  const rateCourse = asyncHandler(async (req: CustomRequest, res: Response) => {
+    const courseId = req.params.courseId;
+    const studentId = req.user?.Id || '';
+    const { rating, reviewText } = req.body;
+    const result = await rateCourseU(
+      studentId,
+      courseId,
+      Number(rating),
+      reviewText,
+      dbRepositoryReview,
+      dbRepositoryCourse
+    );
+    res.status(200).json({
+      status: 'success',
+      message: 'Successfully rated the course',
+      data: result
+    });
+  });
+
+  const getCourseReviews = asyncHandler(async (req: Request, res: Response) => {
+    const courseId = req.params.courseId;
+    const result = await getCourseReviewsU(courseId, dbRepositoryReview);
+    res.status(200).json({
+      status: 'success',
+      message: 'Successfully retrieved course reviews',
+      data: result
+    });
+  });
+
   return {
     addCourse,
     editCourse,
@@ -442,7 +494,9 @@ const courseController = (
     getRecommendedCourseByStudentInterest,
     getTrendingCourses,
     getCourseByStudent,
-    searchCourse
+    searchCourse,
+    rateCourse,
+    getCourseReviews
   };
 };
 

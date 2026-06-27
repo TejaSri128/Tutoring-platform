@@ -20,7 +20,9 @@ export const getCourseByInstructorU = async (
   await Promise.all(
     courses.map(async (course) => {
       if (course.thumbnail) {
-        course.thumbnailUrl = await cloudService.getFile(course.thumbnail.key);
+        course.thumbnailUrl = await cloudService.getFile(
+          course.thumbnail.key ?? course.thumbnail.url ?? ''
+        );
       }
     })
   );

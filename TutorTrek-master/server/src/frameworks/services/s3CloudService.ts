@@ -62,6 +62,15 @@ export const s3Service = () => {
   };
 
   const getFile = async (fileKey: string) => {
+    if (!fileKey) {
+      return 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150';
+    }
+    if (fileKey.startsWith('http')) {
+      return fileKey;
+    }
+    if (!configKeys.AWS_ACCESS_KEY || configKeys.AWS_ACCESS_KEY === 'local' || configKeys.AWS_ACCESS_KEY === '') {
+      return 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150';
+    }
     const getObjectParams = {
       Bucket: configKeys.AWS_BUCKET_NAME,
       Key: fileKey,
@@ -83,6 +92,15 @@ export const s3Service = () => {
   };
 
   const getCloudFrontUrl = async (fileKey: string) => {
+    if (!fileKey) {
+      return '';
+    }
+    if (fileKey.startsWith('http')) {
+      return fileKey;
+    }
+    if (!configKeys.AWS_ACCESS_KEY || configKeys.AWS_ACCESS_KEY === 'local' || configKeys.AWS_ACCESS_KEY === '') {
+      return 'https://tutortrek.online/intro.mp4';
+    }
     const getDistributionParams = {
       Id: configKeys.CLOUDFRONT_DISTRIBUTION_ID,
     };

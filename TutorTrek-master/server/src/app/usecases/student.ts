@@ -85,9 +85,9 @@ export const getStudentDetailsU = async (
   }
   const studentDetails: StudentInterface | null =
     await studentDbRepository.getStudent(id);
-  if (studentDetails?.profilePic?.key) {
+  if (studentDetails?.profilePic) {
     studentDetails.profilePic.url = await cloudService.getFile(
-      studentDetails.profilePic.key
+      studentDetails.profilePic.key ?? studentDetails.profilePic.url ?? ''
     );
   }
   if (studentDetails) {

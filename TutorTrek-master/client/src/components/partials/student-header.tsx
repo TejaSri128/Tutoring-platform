@@ -10,12 +10,12 @@ import { APP_LOGO } from "../../constants/common";
 import { selectUserType } from "../../redux/reducers/authSlice";
 
 const navigation = [
-  { name: "Home", href: "/", current: true },
-  { name: "Courses", href: "/courses", current: false },
-  { name: "Tutors", href: "/tutors", current: false },
-  { name: "Community", href: "/community", current: false },
-  { name: "About", href: "/about", current: false },
-  { name: "Contact", href: "/contact", current: false },
+  { name: "Home", href: "/" },
+  { name: "Courses", href: "/courses" },
+  { name: "Tutors", href: "/tutors" },
+  { name: "Community", href: "/community" },
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contact" },
 ];
 
 function classNames(...classes: any) {
@@ -25,144 +25,162 @@ function classNames(...classes: any) {
 const StudentHeader: React.FC = () => {
   const location = useLocation();
   const isLoggedIn = useSelector(selectIsLoggedIn);
-  const user = useSelector(selectUserType)
+  const user = useSelector(selectUserType);
 
-
-  const handleNavigation = (item: any) => {
-    navigation.forEach((navItem) => {
-      navItem.current = navItem.href === item.href;
-    });
+  const isLinkActive = (href: string) => {
+    if (href === "/") {
+      return location.pathname === "/";
+    }
+    return location.pathname.startsWith(href);
   };
-      
+
   return (
-    <div className='bg-gray-100 border-b border-b-gray-300 '>
-      <Disclosure
-        as='nav'
-        className='bg-white pl-8 pr-8 p-2 md:p-2 lg:p-3 lg:flex lg:justify-center'
-      >
+    <header className="sticky top-0 z-50 backdrop-blur-md bg-[#090d16]/80 border-b border-slate-900 shadow-lg shadow-black/45">
+      <Disclosure as="nav" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1">
         {({ open }) => (
           <>
-            <div className='max-w-full sm:px-6 lg:px-2 md:w-full lg:w-full  '>
-              <div className='flex items-center justify-between md:h-14 lg:h-16'>
-                <div className='flex items-center'>
-                  <div className='flex-shrink-0 '>
-                    <Link to='/'>
-                      <img className='h-10' src={APP_LOGO} alt='Your Company' />
-                    </Link>
-                  </div>
-                  <div className='hidden md:block'>
-                    <div className='ml-10 flex items-baseline space-x-4'>
-                      {navigation.map((item) => (
-                        <Link
-                          key={item.name}
-                          to={item.href}
-                          onClick={() => handleNavigation(item)}
-                          className={classNames(
-                            item.current
-                              ? "bg-blue-gray-500 text-white font-semibold"
-                              : "text-blue-gray-600 hover:text-blue-gray-800 font-semibold hover:bg-gray-300 ",
-                            "rounded-md px-3 py-2 text-sm font-medium"
-                          )}
-                          aria-current={item.current ? "page" : undefined}
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                      {/* <SearchBar /> */}
-                    </div>
-                  </div>
+            <div className="flex items-center justify-between h-16">
+              {/* Logo & Navigation */}
+              <div className="flex items-center gap-8">
+                <div className="flex-shrink-0 transition-transform duration-200 hover:scale-105">
+                  <Link to="/">
+                    <img className="h-9 w-auto filter brightness-110" src={APP_LOGO} alt="TutorTrek" />
+                  </Link>
                 </div>
-                {isLoggedIn&&user==='student'? (
-                  <div className='hidden md:ml-5 md:flex items-center justify-between'>
-                    <div className=''>
-                      <Link to='/dashboard'>
-                        <Button size='md' color='blue-gray'>
-                          Dashboard
-                        </Button>
+                
+                {/* Desktop Menu */}
+                <div className="hidden md:flex items-center space-x-1">
+                  {navigation.map((item) => {
+                    const active = isLinkActive(item.href);
+                    return (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className={classNames(
+                          active
+                            ? "bg-indigo-500/10 text-indigo-400 font-semibold border border-indigo-500/20"
+                            : "text-slate-300 hover:text-indigo-400 hover:bg-slate-900/40",
+                          "rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 border border-transparent"
+                        )}
+                        aria-current={active ? "page" : undefined}
+                      >
+                        {item.name}
                       </Link>
-                    </div>
-                    <div className=' pl-3 ml-3 items-end'>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Action Buttons / Profile */}
+              <div className="hidden md:flex items-center gap-4">
+                {isLoggedIn && user === "student" ? (
+                  <div className="flex items-center gap-4">
+                    <Link to="/dashboard">
+                      <Button 
+                        size="md" 
+                        className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/15 transition-all duration-200 normal-case"
+                      >
+                        Dashboard
+                      </Button>
+                    </Link>
+                    <div className="border-l border-slate-800 pl-4">
                       <ProfileMenu />
                     </div>
                   </div>
                 ) : (
-                  <div className='overflow-hidden'>
-                    <div className='hidden h-8 w-64 lg:mt-3 lg:h-12 lg:w-72 md:flex'>
-                      <div className='space-x-4 '>
-                        <Link to='/login'>
-                          <button className='bg-blue-gray-300 hover:bg-blue-gray-500 text-xs lg:text-sm text-white font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline'>
-                            Login
-                          </button>
-                        </Link>
-                        <Link to='/register'>
-                          <button className='bg-blue-gray-300 hover:bg-blue-gray-500  text-xs lg:text-sm text-white font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline'>
-                            Register
-                          </button>
-                        </Link>
-                        <Link to='/instructors/login'>
-                          <button className='bg-purple-800 hover:bg-purple-900 text-xs text-white lg:text-sm font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline'>
-                            Instructor Login
-                          </button>
-                        </Link>
-                      </div>
-                    </div>
+                  <div className="flex items-center gap-3">
+                    <Link to="/login">
+                      <button className="text-slate-300 hover:text-indigo-400 hover:bg-slate-900/40 text-sm font-semibold px-4 py-2.5 rounded-xl transition-all duration-200">
+                        Login
+                      </button>
+                    </Link>
+                    <Link to="/register">
+                      <button className="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-600/15 transition-all duration-200">
+                        Register
+                      </button>
+                    </Link>
+                    <div className="h-6 w-px bg-slate-800 mx-1" />
+                    <Link to="/instructors/login">
+                      <button className="bg-purple-950/20 text-purple-400 hover:bg-purple-950/45 text-xs font-semibold px-4 py-2.5 rounded-xl transition-all duration-200 border border-purple-900/30">
+                        Instructor Portal
+                      </button>
+                    </Link>
                   </div>
                 )}
-                <div className='-mr-2 flex md:hidden'>
-                  <Disclosure.Button className='inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-white'>
-                    <span className='sr-only'>Open main menu</span>
-                    {open ? (
-                      <XMarkIcon className='block h-6 w-6' aria-hidden='true' />
-                    ) : (
-                      <Bars3Icon className='block h-6 w-6' aria-hidden='true' />
-                    )}
-                  </Disclosure.Button>
-                </div>
+              </div>
+
+              {/* Mobile menu button */}
+              <div className="flex md:hidden">
+                <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-900/40 focus:outline-none transition-colors duration-200">
+                  <span className="sr-only">Open main menu</span>
+                  {open ? (
+                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                  ) : (
+                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                  )}
+                </Disclosure.Button>
               </div>
             </div>
-            <Disclosure.Panel className='lg:hidden'>
-              <div className='px-2 pt-2 pb-3 space-y-1 sm:px-3'>
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    onClick={() => handleNavigation(item)}
-                    className={classNames(
-                      item.current
-                        ? "bg-blue-gray-500 text-white"
-                        : "text-blue-gray-600 hover:bg-gray-300 hover:text-blue-gray-800",
-                      "block rounded-md px-3 py-2 text-base font-medium"
-                    )}
-                    aria-current={item.current ? "page" : undefined}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+
+            {/* Mobile panel */}
+            <Disclosure.Panel className="md:hidden border-t border-slate-900 py-3 space-y-1 animate-fade-in-up">
+              <div className="space-y-1 px-2">
+                {navigation.map((item) => {
+                  const active = isLinkActive(item.href);
+                  return (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className={classNames(
+                        active
+                          ? "bg-indigo-500/10 text-indigo-400 font-semibold border border-indigo-500/20"
+                          : "text-slate-300 hover:text-indigo-400 hover:bg-slate-900/40",
+                        "block rounded-xl px-4 py-2.5 text-base font-medium transition-all duration-150 border border-transparent"
+                      )}
+                      aria-current={active ? "page" : undefined}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                })}
               </div>
-              <div className='border-t border-gray-700 pb-3 pt-4'>
-                <div className='mt-3 space-y-1 px-2'>
-                  <Link to='/login'>
-                    <button className='w-full mb-2 block rounded-md px-3 py-2 text-base font-medium  text-gray-200 bg-blue-gray-300 hover:bg-blue-gray-500   hover:text-white'>
-                      Login
-                    </button>
+              
+              <div className="border-t border-slate-900 pt-4 pb-2 px-4 space-y-2">
+                {isLoggedIn && user === "student" ? (
+                  <Link to="/dashboard" className="block w-full">
+                    <Button 
+                      fullWidth
+                      size="md" 
+                      className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl"
+                    >
+                      Dashboard
+                    </Button>
                   </Link>
-                  <Link to='/register'>
-                    <button className='w-full mb-2 block rounded-md px-3 py-2 text-base font-medium  text-gray-200 bg-blue-gray-300 hover:bg-blue-gray-500  hover:text-white'>
-                      Register
-                    </button>
-                  </Link>
-                  <Link to='/instructors/login'>
-                    <button className='w-full block bg-purple-800 hover:bg-purple-900 text-sm text-gray-200 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>
-                      Instructor Login
-                    </button>
-                  </Link>
-                </div>
+                ) : (
+                  <>
+                    <Link to="/login" className="block w-full">
+                      <button className="w-full text-center text-slate-300 hover:text-indigo-400 hover:bg-slate-900/40 text-base font-semibold py-2.5 rounded-xl transition-all duration-200 border border-slate-900">
+                        Login
+                      </button>
+                    </Link>
+                    <Link to="/register" className="block w-full">
+                      <button className="w-full text-center bg-indigo-600 hover:bg-indigo-500 text-white text-base font-semibold py-2.5 rounded-xl shadow-lg shadow-indigo-600/15 transition-all duration-200">
+                        Register
+                      </button>
+                    </Link>
+                    <Link to="/instructors/login" className="block w-full">
+                      <button className="w-full text-center bg-purple-950/20 text-purple-400 hover:bg-purple-950/45 text-sm font-semibold py-2.5 rounded-xl transition-all duration-200 border border-purple-900/30">
+                        Instructor Portal
+                      </button>
+                    </Link>
+                  </>
+                )}
               </div>
             </Disclosure.Panel>
           </>
         )}
       </Disclosure>
-    </div>
+    </header>
   );
 };
 

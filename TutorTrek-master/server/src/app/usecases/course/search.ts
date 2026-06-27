@@ -41,7 +41,9 @@ export const searchCourseU = async (
   await Promise.all(
     searchResult.map(async (course) => {
       if (course.thumbnail) {
-        course.thumbnailUrl = await cloudService.getFile(course.thumbnail.key);
+        course.thumbnailUrl = await cloudService.getFile(
+          course.thumbnail.key ?? course.thumbnail.url ?? ''
+        );
       }
     })
   );

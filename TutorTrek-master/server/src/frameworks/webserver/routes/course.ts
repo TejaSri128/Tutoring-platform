@@ -19,6 +19,8 @@ import { redisCacheRepository } from '../../../frameworks/database/redis/redisCa
 import { cacheRepositoryInterface } from '../../../app/repositories/cachedRepoInterface';
 import { RedisClient } from '../../../app';
 import { cachingMiddleware } from '../middlewares/redisCaching';
+import { reviewDbRepository } from '../../../app/repositories/reviewDbRepository';
+import { reviewRepositoryMongoDB } from '../../../frameworks/database/mongodb/repositories/reviewRepoMongoDb';
 
 const courseRouter = (redisClient: RedisClient) => {
   const router = express.Router();
@@ -37,7 +39,9 @@ const courseRouter = (redisClient: RedisClient) => {
     paymentRepositoryMongodb,
     cacheRepositoryInterface,
     redisCacheRepository,
-    redisClient
+    redisClient,
+    reviewDbRepository,
+    reviewRepositoryMongoDB
   );
   //* Add course
   router.post(
@@ -63,6 +67,10 @@ const courseRouter = (redisClient: RedisClient) => {
   );
 
   router.get('/get-course/:courseId', controller.getIndividualCourse);
+
+  router.post('/get-course/:courseId/rate', jwtAuthMiddleware, controller.rateCourse);
+
+  router.get('/get-course/:courseId/reviews', controller.getCourseReviews);
 
   router.get(
     '/get-course-by-instructor',

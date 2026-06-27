@@ -25,7 +25,16 @@ const routes = (app: Application, redisClient: RedisClient) => {
   app.use('/api/courses', courseRouter(redisClient));
   app.use('/api/video-streaming', videoStreamRouter());
   app.use('/api/instructors', instructorRouter());
-  app.use('/api/payments', jwtAuthMiddleware, paymentRouter());
+  app.use(
+    '/api/payments',
+    (req, res, next) => {
+      if (req.originalUrl && req.originalUrl.includes('/stripe/webhook')) {
+        return next();
+      }
+      return jwtAuthMiddleware(req, res, next);
+    },
+    paymentRouter()
+  );
   app.use('/api/students', studentRouter(redisClient));
 };
 

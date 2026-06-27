@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  Navbar,
-  Typography,
   Collapse,
   IconButton,
   MenuItem
@@ -11,11 +9,8 @@ import { FaUserGraduate } from "react-icons/fa";
 import { PowerIcon } from "@heroicons/react/24/solid";
 import { MdDashboard } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-import {FiSettings} from 'react-icons/fi'
-
-import {
-  Bars2Icon,
-} from "@heroicons/react/24/outline";
+import { FiSettings } from "react-icons/fi";
+import { Bars2Icon } from "@heroicons/react/24/outline";
 
 const NavItems = [
   {
@@ -37,7 +32,6 @@ const NavItems = [
     path: "/dashboard/settings",
     name: "Settings",
     icon: FiSettings
-
   },
   {
     path: "",
@@ -49,21 +43,12 @@ const NavItems = [
 function NavList() {
   return (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
-      {NavItems.map(({ name, icon,path }, key) => (
-        <Link to={path} key={key}>
-        <Typography
-          key={name}
-          as="a"
-          href="#"
-          variant="small"
-          color="blue-gray"
-          className="font-normal"
-        >
-          <MenuItem className="flex items-center gap-2 lg:rounded-full">
-            {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "}
+      {NavItems.map(({ name, icon, path }, key) => (
+        <Link to={path} key={key} className="block w-full">
+          <MenuItem className="flex items-center gap-2 lg:rounded-full text-slate-300 hover:bg-slate-800 hover:text-white transition-all text-xs font-semibold py-2 px-4">
+            {React.createElement(icon, { className: "h-[16px] w-[16px] text-indigo-400" })}{" "}
             {name}
           </MenuItem>
-        </Typography>
         </Link>
       ))}
     </ul>
@@ -79,35 +64,26 @@ export default function InstructorHeader() {
       "resize",
       () => window.innerWidth >= 960 && setIsNavOpen(false)
     );
-  }, [])
+  }, []);
  
   return (
-    <Navbar className="mx-auto border-b bg-white border-gray-300 max-w-full   lg:pl-6 shadow-none rounded-none">
-      <div className="relative mx-auto flex items-center text-blue-gray-900">
-        <Typography
-          as="a"
-          href="#"
-          className="mr-4 ml-2 cursor-pointer py-1.5 font-semibold text-2xl"
-        >
+    <nav className="w-full bg-slate-900 border-b border-slate-900/60 px-6 py-4 flex items-center justify-between text-white z-20 shadow-lg shadow-black/10">
+      <div className="relative flex items-center w-full">
+        <span className="font-extrabold text-2xl tracking-tight text-white mr-4">
           TutorTrek
-        </Typography>
-        <div className="absolute top-2/4 left-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block">
-        </div>
+        </span>
         <IconButton
           size="sm"
-          color="blue-gray"
           variant="text"
           onClick={toggleIsNavOpen}
-          className="ml-auto mr-2 lg:hidden"  
+          className="ml-auto mr-2 lg:hidden text-white"  
         > 
-          <Bars2Icon className="h-6 w-6" />      
+          <Bars2Icon className="h-6 w-6 text-white" />      
         </IconButton>
       </div>
-      <Collapse open={isNavOpen} className="overflow-hidden">
-      {/* <MobileNav/> */}
-      <NavList/>
+      <Collapse open={isNavOpen} className="overflow-hidden lg:hidden">
+        <NavList />
       </Collapse>
-    </Navbar>
-
+    </nav>
   );
 }

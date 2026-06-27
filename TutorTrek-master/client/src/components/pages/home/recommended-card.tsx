@@ -1,9 +1,9 @@
+import React from "react";
 import {
   Card,
-  CardHeader,
   CardBody,
-  Typography,
   Avatar,
+  Typography,
 } from "@material-tailwind/react";
 import { ApiResponseRecommended } from "../../../api/types/apiResponses/api-response-home-page-listing";
 
@@ -15,40 +15,64 @@ const RecommendedCard: React.FC<Props> = ({ courseInfo }) => {
   const { course, instructor, media } = courseInfo;
   const imageUrl = media.thumbnailUrl;
   const profileUrl = media.profileUrl;
+  
   return (
-    <Card
-      shadow={false}
-      className='relative m-5 grid h-[30rem] sm:h-[28rem] sm:w-[22rem] w-[24rem] items-end justify-center overflow-hidden text-center'
-    >
-      <CardHeader
-        floated={false}
-        shadow={false}
-        color='transparent'
-        style={{ backgroundImage: `url(${imageUrl})` }}
-        className={`absolute inset-0 m-0 h-full w-full rounded-none bg-cover bg-center`}
-      >
-        <div className='to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-t from-black/80 via-black/50' />
-      </CardHeader>
-      <CardBody className='relative py-14 px-6 md:px-12'>
-        <Typography
-          variant='h3'
-          color='white'
-          className='mb-6 line-clamp-2 font-medium leading-[1.5]'
-        >
-          {course?.name}
-        </Typography>
-        <Typography variant='h5' className='mb-4 text-gray-400'>
-          {instructor?.firstName + " " + instructor?.lastName}
-        </Typography>
-        <Avatar
-          size='xl'
-          variant='circular'
-          alt='tania andrew'
-          className='border-2 border-white'
-          src={profileUrl}
+    <Card className="group w-full h-[26rem] rounded-2xl border border-slate-900 bg-slate-900/50 hover:bg-slate-900 hover:border-emerald-500/30 shadow-md transition-all duration-300 overflow-hidden flex flex-col justify-between">
+      {/* Upper Logo Area */}
+      <div className="relative h-44 w-full bg-[#06090f] overflow-hidden border-b border-slate-900">
+        <img 
+          src={imageUrl} 
+          alt={course?.name}
+          className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
         />
+        {/* Glow tint top left */}
+        <div className="absolute top-0 left-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+        
+        {/* Course badge */}
+        <span className="absolute top-3 left-3 bg-slate-900/90 backdrop-blur-sm text-[9px] text-emerald-400 font-bold px-2.5 py-0.5 rounded-lg border border-emerald-500/20 uppercase tracking-widest">
+          Recommended
+        </span>
+      </div>
+
+      {/* Main Card Body */}
+      <CardBody className="p-5 flex-1 flex flex-col justify-between text-left">
+        <div>
+          {/* Title */}
+          <Typography
+            variant="h4"
+            className="text-white font-extrabold text-lg tracking-tight leading-snug line-clamp-2 group-hover:text-emerald-400 transition-colors duration-150"
+          >
+            {course?.name}
+          </Typography>
+          <p className="text-slate-400 text-xs mt-2 line-clamp-2 font-light">
+            Step-by-step engineering guidelines custom recommended for your tech track interest.
+          </p>
+        </div>
+
+        <div>
+          {/* Divider */}
+          <div className="w-full h-px bg-slate-900 my-4" />
+
+          {/* Instructor & Profile Details */}
+          <div className="flex items-center gap-3">
+            <Avatar
+              size="md"
+              variant="circular"
+              alt={instructor?.firstName}
+              className="border border-slate-800 shadow-sm object-cover"
+              src={profileUrl || "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150"}
+            />
+            <div>
+              <p className="text-slate-200 text-xs font-semibold">
+                {instructor?.firstName + " " + instructor?.lastName}
+              </p>
+              <p className="text-[10px] text-slate-500">Course Instructor</p>
+            </div>
+          </div>
+        </div>
       </CardBody>
     </Card>
   );
 };
+
 export default RecommendedCard;

@@ -6,7 +6,6 @@ import { ApiResponseRecommended } from "../../../api/types/apiResponses/api-resp
 import TrendingCardShimmer from "components/shimmer/shimmer-trending-course";
 import { selectIsLoggedIn } from "../../../redux/reducers/authSlice";
 import { useSelector } from "react-redux";
-import { Typography } from "@material-tailwind/react";
 import {
   getTrendingCourses,
   getRecommendedCourses,
@@ -40,9 +39,6 @@ const StudentHomePage: React.FC = () => {
       }, 1000);
     } catch (error) {
       setIsLoadingTrending(false);
-      // toast.error("Something went wrong", {
-      //   position: toast.POSITION.BOTTOM_RIGHT,
-      // });
     }
   };
 
@@ -56,9 +52,6 @@ const StudentHomePage: React.FC = () => {
       }, 1000);
     } catch (error) {
       selectIsLoadingRecommended(false);
-      // toast.error("Something went wrong", {
-      //   position: toast.POSITION.BOTTOM_RIGHT,
-      // });
     }
   };
 
@@ -76,119 +69,108 @@ const StudentHomePage: React.FC = () => {
     setShowMoreRecommended(true);
     setCardsToShow((prevCardsToShow) => prevCardsToShow + 3);
   };
+
   if (isLoadingTrending || isLoadingRecommended) {
     return (
-      <div>
+      <div className="bg-[#090d16] min-h-screen text-slate-100">
         <Carousel />
-        <div className='lg:p-10 md:p-7 pt-7 sm:p-8 w-full'>
-          <div className='ml-10 flex items-center justify-start w-9/12'>
-            <Typography
-              variant='h1'
-              className='text-2xl  lg:text-4xl p-2 ml-2  font-semibold'
-            >
-              Trending Courses
-            </Typography>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="mb-8 border-b border-slate-900 pb-4">
+            <div className="h-8 w-64 bg-slate-900 rounded-lg animate-pulse" />
+            <div className="mt-2 h-4 w-96 bg-slate-900 rounded-lg animate-pulse" />
           </div>
-          <div className='flex items-center justify-between px-10 flex-wrap'>
-            {Array.from({ length: 6 }).map((_, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+            {Array.from({ length: 3 }).map((_, index) => (
               <TrendingCardShimmer key={index} />
             ))}
           </div>
         </div>
-        {isLoggedIn && (
-          <div className='lg:p-10 md:p-7 pt-5 sm:p-8 w-full'>
-            <div className='ml-10 flex items-center justify-start w-9/12'>
-              <Typography
-                variant='h1'
-                className='text-2xl  p-2 ml-2 lg:text-4xl font-semibold'
-              >
-                Recommended Courses
-              </Typography>
-            </div>
-            <div className='flex items-center justify-between pt-2 px-10 flex-wrap'>
-              {Array.from({ length: 6 }).map((_, index) => (
-                <TrendingCardShimmer key={index} />
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     );
   }
 
   return (
-    <div>
-      <div>
-        <Carousel />
-      </div>
-      <div className='lg:p-10 md:p-7 pt-7 sm:p-8 w-full'>
-        <div className='ml-10  flex items-center justify-start w-9/12'>
-          <Typography
-            variant='h1'
-            className='text-2xl  p-2 ml-2 lg:text-4xl font-semibold'
-          >
-            Trending Courses
-          </Typography>
+    <div className="bg-[#090d16] min-h-screen text-slate-100 relative overflow-hidden pb-16">
+      {/* Background neon blurs */}
+      <div className="absolute top-[30rem] -left-20 w-[30rem] h-[30rem] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[65rem] -right-20 w-[35rem] h-[35rem] bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
+
+      {/* Main Slider Carousel */}
+      <Carousel />
+
+      {/* Trending Courses Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 relative z-10">
+        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between border-b border-slate-900 pb-6">
+          <div>
+            <h2 className="text-3xl font-extrabold tracking-tight text-white">
+              Trending Courses
+            </h2>
+            <p className="mt-2 text-sm text-slate-400 font-light">
+              Accelerate your engineering credentials with our most enrolled backend and frontend courses.
+            </p>
+          </div>
         </div>
 
-        <div className='flex items-center justify-between px-10 flex-wrap'>
-          {trendingCourses?.slice(0, cardsToShow).map((course) => {
-            return (
-              <div className='grid  md:m-5 my-6  justify-center overflow-hidden text-center  bg-red-200 rounded-lg'>
-                <Link key={course._id} to={`/courses/${course._id}`}>
-                  <TrendingCard courseInfo={course} />
-                </Link>
-              </div>
-            );
-          })}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+          {trendingCourses?.slice(0, cardsToShow).map((course) => (
+            <Link 
+              key={course._id} 
+              to={`/courses/${course._id}`}
+              className="block transition-transform duration-300 hover:-translate-y-2 h-full w-full max-w-[22rem]"
+            >
+              <TrendingCard courseInfo={course} />
+            </Link>
+          ))}
         </div>
+
         {trendingCourses && trendingCourses.length > cardsToShow && (
-          <div className='md:flex-shrink-0 mt-3 ml-6'>
-            <div className='flex-shrink-0'>
-              <button
-                className='text-customFontColorBlack ml-3 hover:text-blue-gray-600 font-bold px-6 rounded'
-                onClick={handleShowMoreTrending}
-              >
-                View More
-              </button>
-            </div>
+          <div className="mt-12 flex justify-center">
+            <button
+              onClick={handleShowMoreTrending}
+              className="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 hover:border-slate-700 font-semibold px-6 py-3 rounded-xl shadow-md transition-all duration-200"
+            >
+              View More Courses
+            </button>
           </div>
         )}
       </div>
 
+      {/* Recommended Courses Section */}
       {recommendedCourses && (
-        <div className='lg:p-10 md:p-7 pt-5 sm:p-8 w-full'>
-          <div className='ml-10 flex items-center justify-start w-9/12'>
-            <Typography
-              variant='h1'
-              className='text-2xl  p-2 ml-2 lg:text-4xl font-semibold'
-            >
-              Recommended Courses
-            </Typography>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 relative z-10">
+          <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between border-b border-slate-900 pb-6">
+            <div>
+              <h2 className="text-3xl font-extrabold tracking-tight text-white">
+                Recommended for You
+              </h2>
+              <p className="mt-2 text-sm text-slate-400 font-light">
+                Tailored architectures and tech guides picked based on your interest domains.
+              </p>
+            </div>
           </div>
-          <div className='flex items-center justify-between pt-2 px-10 flex-wrap'>
-            {recommendedCourses?.slice(0, cardsToShow).map((course, index) => {
-              return (
-                <React.Fragment key={index}>
-                  <Link to={`/courses/${course._id}`} className=''>
-                    <RecommendedCard courseInfo={course} />
-                  </Link>
-                  {!showMoreRecommended &&
-                    index === cardsToShow - 1 &&
-                    recommendedCourses.length > cardsToShow && (
-                      <div className='flex justify-end w-full'>
-                        <button
-                          className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
-                          onClick={handleShowMoreRecommended}
-                        >
-                          View More
-                        </button>
-                      </div>
-                    )}
-                </React.Fragment>
-              );
-            })}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+            {recommendedCourses?.slice(0, cardsToShow).map((course) => (
+              <Link 
+                key={course._id} 
+                to={`/courses/${course._id}`}
+                className="block transition-transform duration-300 hover:-translate-y-2 h-full w-full max-w-[22rem]"
+              >
+                <RecommendedCard courseInfo={course} />
+              </Link>
+            ))}
           </div>
+
+          {!showMoreRecommended && recommendedCourses.length > cardsToShow && (
+            <div className="mt-12 flex justify-center">
+              <button
+                onClick={handleShowMoreRecommended}
+                className="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 hover:border-slate-700 font-semibold px-6 py-3 rounded-xl shadow-md transition-all duration-200"
+              >
+                View More Recommendations
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -83,7 +83,7 @@ const ChangePasswordForm: React.FC<Props> = ({ editMode, setEditMode }) => {
           value={formik.values.currentPassword}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          className={`block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${
+          className={`block py-2.5 px-0 w-full text-sm text-slate-100 bg-transparent border-0 border-b-2 border-slate-800 appearance-none focus:outline-none focus:ring-0 focus:border-indigo-500 peer disabled:opacity-50 ${
             formik.touched.currentPassword && formik.errors.currentPassword
               ? "border-red-500"
               : ""
@@ -91,17 +91,17 @@ const ChangePasswordForm: React.FC<Props> = ({ editMode, setEditMode }) => {
           placeholder=' '
         />
         {formik.touched.currentPassword && formik.errors.currentPassword && (
-          <div className='text-red-500 text-xs mt-1'>
+          <div className='text-red-500 text-xs mt-1 font-medium'>
             {formik.errors.currentPassword}
           </div>
         )}
         <label
-          htmlFor='floating_email'
-          className={`peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] ${
+          htmlFor='floating_current_password'
+          className={`peer-focus:font-medium absolute text-sm text-slate-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] ${
             formik.values.currentPassword
               ? "peer-placeholder-shown:scale-100"
               : ""
-          } peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
+          } peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-indigo-400`}
         >
           Current Password
         </label>
@@ -111,9 +111,9 @@ const ChangePasswordForm: React.FC<Props> = ({ editMode, setEditMode }) => {
           onClick={() => togglePasswordVisibility("currentPassword")}
         >
           {showCurrentPassword ? (
-            <AiOutlineEyeInvisible className='text-gray-500' />
+            <AiOutlineEyeInvisible className='text-indigo-400 hover:text-indigo-300 transition-colors text-base' />
           ) : (
-            <AiOutlineEye className='text-gray-500' />
+            <AiOutlineEye className='text-indigo-400 hover:text-indigo-300 transition-colors text-base' />
           )}
         </button>
       </div>
@@ -126,7 +126,7 @@ const ChangePasswordForm: React.FC<Props> = ({ editMode, setEditMode }) => {
           value={formik.values.newPassword}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          className={`block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${
+          className={`block py-2.5 px-0 w-full text-sm text-slate-100 bg-transparent border-0 border-b-2 border-slate-800 appearance-none focus:outline-none focus:ring-0 focus:border-indigo-500 peer disabled:opacity-50 ${
             formik.touched.newPassword && formik.errors.newPassword
               ? "border-red-500"
               : ""
@@ -134,15 +134,15 @@ const ChangePasswordForm: React.FC<Props> = ({ editMode, setEditMode }) => {
           placeholder=' '
         />
         {formik.touched.newPassword && formik.errors.newPassword && (
-          <div className='text-red-500 text-xs mt-1'>
+          <div className='text-red-500 text-xs mt-1 font-medium'>
             {formik.errors.newPassword}
           </div>
         )}
         <label
           htmlFor='floating_password'
-          className={`peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] ${
+          className={`peer-focus:font-medium absolute text-sm text-slate-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] ${
             formik.values.newPassword ? "peer-placeholder-shown:scale-100" : ""
-          } peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
+          } peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-indigo-400`}
         >
           Password
         </label>
@@ -152,9 +152,9 @@ const ChangePasswordForm: React.FC<Props> = ({ editMode, setEditMode }) => {
           onClick={() => togglePasswordVisibility("newPassword")}
         >
           {showNewPassword ? (
-            <AiOutlineEyeInvisible className='text-gray-500' />
+            <AiOutlineEyeInvisible className='text-indigo-400 hover:text-indigo-300 transition-colors text-base' />
           ) : (
-            <AiOutlineEye className='text-gray-500' />
+            <AiOutlineEye className='text-indigo-400 hover:text-indigo-300 transition-colors text-base' />
           )}
         </button>
       </div>
@@ -167,7 +167,7 @@ const ChangePasswordForm: React.FC<Props> = ({ editMode, setEditMode }) => {
           value={formik.values.repeatPassword}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          className={`block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${
+          className={`block py-2.5 px-0 w-full text-sm text-slate-100 bg-transparent border-0 border-b-2 border-slate-800 appearance-none focus:outline-none focus:ring-0 focus:border-indigo-500 peer disabled:opacity-50 ${
             formik.touched.repeatPassword && formik.errors.repeatPassword
               ? "border-red-500"
               : ""
@@ -175,17 +175,17 @@ const ChangePasswordForm: React.FC<Props> = ({ editMode, setEditMode }) => {
           placeholder=' '
         />
         {formik.touched.repeatPassword && formik.errors.repeatPassword && (
-          <div className='text-red-500 text-xs mt-1'>
+          <div className='text-red-500 text-xs mt-1 font-medium'>
             {formik.errors.repeatPassword}
           </div>
         )}
         <label
           htmlFor='floating_repeat_password'
-          className={`peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] ${
+          className={`peer-focus:font-medium absolute text-sm text-slate-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] ${
             formik.values.repeatPassword
               ? "peer-placeholder-shown:scale-100"
               : ""
-          } peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
+          } peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-indigo-400`}
         >
           Confirm password
         </label>
@@ -195,17 +195,17 @@ const ChangePasswordForm: React.FC<Props> = ({ editMode, setEditMode }) => {
           onClick={() => togglePasswordVisibility("repeatPassword")}
         >
           {showRepeatPassword ? (
-            <AiOutlineEyeInvisible className='text-gray-500' />
+            <AiOutlineEyeInvisible className='text-indigo-400 hover:text-indigo-300 transition-colors text-base' />
           ) : (
-            <AiOutlineEye className='text-gray-500' />
+            <AiOutlineEye className='text-indigo-400 hover:text-indigo-300 transition-colors text-base' />
           )}
         </button>
       </div>
-      <div className='relative pt-14 pr-1'>
+      <div className='relative pt-8 pr-1'>
         {editMode && (
           <button
             type='submit'
-            className='text-white absolute bottom-0 right-0 bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+            className='text-white absolute bottom-0 right-0 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 font-bold py-2.5 px-6 rounded-xl shadow-lg shadow-indigo-600/15 hover:shadow-indigo-600/25 transition-all duration-200 text-sm'
           >
             Reset
           </button>

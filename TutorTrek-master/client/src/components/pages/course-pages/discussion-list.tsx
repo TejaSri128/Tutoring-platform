@@ -51,16 +51,16 @@ const MenuBar: React.FC<{
     }
   };
 
-  //todo need to find a better way to hide the scrollbar when editing and deleting the comments
-  // useEffect(() => {
-  //   // window.scrollTo(0, 0);
-  //   // Hide the browser's scroll bar on component mount
-  //   document.body.style.overflow = "hidden";
-  //   return () => {
-  //     // Restore the browser's scroll bar on component unmount
-  //     document.body.style.overflow = "auto";
-  //   };
-  // });
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [open]);
 
   const handleMenuItemClick = (action: string) => {
     switch (action) {

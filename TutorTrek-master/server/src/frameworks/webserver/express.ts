@@ -24,7 +24,15 @@ const expressConfig = (app: Application) => {
   }
   app.set('trust proxy', true); // Enable trust for X-Forwarded-* headers
   app.use(cors());
-  app.use(express.json());
+  app.use(
+    express.json({
+      verify: (req: any, res, buf) => {
+        if (req.originalUrl && req.originalUrl.includes('/stripe/webhook')) {
+          req.rawBody = buf;
+        }
+      }
+    })
+  );
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
   app.use(limiter);

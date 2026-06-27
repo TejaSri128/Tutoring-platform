@@ -14,7 +14,9 @@ export const getAllCourseU = async (
   await Promise.all(
     courses.map(async (course) => {
       if (course.thumbnail) {
-        course.thumbnailUrl = await cloudService.getFile(course.thumbnail.key);
+        course.thumbnailUrl = await cloudService.getFile(
+          course.thumbnail.key ?? course.thumbnail.url ?? ''
+        );
       }
     })
   );
@@ -40,11 +42,15 @@ export const getCourseByIdU = async (
   // }
   if (course) {
     if (course.thumbnail) {
-      const thumbnail = await cloudService.getFile(course.thumbnail.key);
+      const thumbnail = await cloudService.getFile(
+        course.thumbnail.key ?? course.thumbnail.url ?? ''
+      );
       course.thumbnailUrl = thumbnail;
     }
     if (course.guidelines) {
-      const guidelines = await cloudService.getFile(course.guidelines.key);
+      const guidelines = await cloudService.getFile(
+        course.guidelines.key ?? course.guidelines.url ?? ''
+      );
       course.guidelinesUrl = guidelines;
     }
     // if(course.introduction){
@@ -69,7 +75,9 @@ export const getCourseByStudentU = async (
   await Promise.all(
     courses.map(async (course) => {
       if (course.thumbnail) {
-        course.thumbnailUrl = await cloudService.getFile(course.thumbnail.key);
+        course.thumbnailUrl = await cloudService.getFile(
+          course.thumbnail.key ?? course.thumbnail.url ?? ''
+        );
       }
     })
   );

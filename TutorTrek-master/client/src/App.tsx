@@ -48,7 +48,7 @@ export const Student: React.FC = () => {
     };
   }, []);
 
-  const headerClassName = `bg-gray-100 ${
+  const headerClassName = `bg-transparent ${
     isHeaderVisible
       ? "opacity-100 transition-opacity duration-500 "
       : "opacity-0 "
@@ -69,7 +69,7 @@ export const Student: React.FC = () => {
         />
       )}
       {isOnline ? (
-        <div className='bg-white font-sans'>
+        <div className='bg-[#090d16] font-sans min-h-screen text-slate-100'>
           <div className={`${headerClassName}`}>
             <StudentHeader />
           </div>

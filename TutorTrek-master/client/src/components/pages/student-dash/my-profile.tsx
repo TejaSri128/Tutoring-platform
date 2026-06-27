@@ -24,50 +24,52 @@ const MyProfile: React.FC = () => {
   };
 
   return (
-    <div className='w-full flex justify-center items-center'>
-      <div className='w-11/12'>
-        <div>
-          <div className='pt-5 pb-6 w-full'>
-            <h2 className='text-3xl font-semibold text-customFontColorBlack'>
-              Edit profile info
-            </h2>
-          </div>
+    <div className="w-full flex justify-center items-center py-6 bg-[#090d16] text-slate-100 font-sans">
+      <div className="w-full max-w-6xl space-y-8 relative z-10">
+        <div className="border-b border-slate-900 pb-6">
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white">
+            Edit Profile Info
+          </h2>
+          <p className="text-slate-400 text-sm mt-1 font-light">
+            Update your personal account settings, credentials, and password.
+          </p>
         </div>
-        <div className='flex flex-col md:flex-row gap-x-10 h-full pb-10'>
-          <div className='border md:w-7/12 w-full h-full rounded-md bg-white border-gray-300'>
-            <div className='flex justify-between'>
-              <h3 className='pl-5 pt-5 text-lg text-customFontColorBlack font-semibold'>
+        <div className="flex flex-col lg:flex-row gap-8 h-full pb-10">
+          <div className="bg-slate-900/40 border border-slate-900 lg:w-7/12 w-full h-full rounded-3xl backdrop-blur-md shadow-2xl shadow-black/35 relative overflow-hidden p-6">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/5 rounded-full blur-[80px] pointer-events-none" />
+            <div className="flex justify-between items-center pb-4 border-b border-slate-900 mb-6">
+              <h3 className="text-lg text-white font-bold tracking-tight">
                 Account Info
               </h3>
-              <div>
-                <button
-                  className='p-5'
-                  onClick={() => handleEditClick("account")}
-                >
-                  <FiEdit className='text-customFontColorBlack text-lg' />
-                </button>
-              </div>
+              <button
+                className="p-2 hover:bg-slate-800 rounded-xl transition-all"
+                onClick={() => handleEditClick("account")}
+              >
+                <FiEdit className="text-indigo-400 hover:text-indigo-300 text-lg transition-colors" />
+              </button>
             </div>
-            <div className='p-6'>
+            <div>
               <ProfileForm
                 editMode={editState.mode && editState.type === "account"}
                 setEditMode={handleEditModeClose}
               />
             </div>
           </div>
-          <div className='border my-7 md:mt-0 pt-5 pb-10 md:w-5/12 w-full h-full rounded-md bg-white border-gray-300'>
-            <div className='flex justify-between'>
-              <h3 className='pl-5 text-lg text-customFontColorBlack font-semibold'>
-                Change password
+
+          <div className="bg-slate-900/40 border border-slate-900 lg:w-5/12 w-full h-full rounded-3xl backdrop-blur-md shadow-2xl shadow-black/35 relative overflow-hidden p-6">
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/5 rounded-full blur-[80px] pointer-events-none" />
+            <div className="flex justify-between items-center pb-4 border-b border-slate-900 mb-6">
+              <h3 className="text-lg text-white font-bold tracking-tight">
+                Change Password
               </h3>
               <button
-                className='pr-3'
+                className="p-2 hover:bg-slate-800 rounded-xl transition-all"
                 onClick={() => handleEditClick("password")}
               >
-                <FiEdit className='text-customFontColorBlack text-lg' />
+                <FiEdit className="text-indigo-400 hover:text-indigo-300 text-lg transition-colors" />
               </button>
             </div>
-            <div className='p-6'>
+            <div>
               <ChangePasswordForm
                 editMode={editState.mode && editState.type === "password"}
                 setEditMode={handleEditModeClose}

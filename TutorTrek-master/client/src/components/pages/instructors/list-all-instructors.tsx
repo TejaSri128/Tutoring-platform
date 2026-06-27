@@ -73,8 +73,8 @@ const ListAllInstructors: React.FC<Props> = () => {
       setIsSearchLoading(true);
       const searchResult = instructors?.filter(
         (instructor) =>
-          instructor.firstName.toLowerCase().trim().includes(searchQuery) ||
-          instructor.lastName.toLowerCase().trim().includes(searchQuery)
+          instructor.firstName.toLowerCase().trim().includes(searchQuery.toLowerCase()) ||
+          instructor.lastName.toLowerCase().trim().includes(searchQuery.toLowerCase())
       );
       setTimeout(() => {
         setFilteredInstructors(searchResult);
@@ -96,6 +96,7 @@ const ListAllInstructors: React.FC<Props> = () => {
       filterValue.length === 0 ||
       instructor.subjects.some((category) => filterValue.includes(category))
   );
+
   const handleSelect = (value: string) => {
     setFilterValue(value);
   };
@@ -105,56 +106,73 @@ const ListAllInstructors: React.FC<Props> = () => {
   }
 
   return (
-    <div className="h-full pb-7">
-      <div className="h-1/3 p-12 flex flex-col w-full bg-skyBlueCustom items-center justify-center">
-        <div className="block text-center">
-          <h1 className="p-2 text-customFontColorBlack md:text-4xl sm:text-4xl font-bold">
+    <div className="bg-[#090d16] min-h-screen text-slate-100 pb-16 font-sans relative overflow-hidden">
+      {/* Background blurs */}
+      <div className="absolute top-80 left-0 w-80 h-80 bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[40rem] right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+      {/* Header Banner */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-[#090d16] via-slate-900 to-indigo-950 text-white py-14 px-6 border-b border-slate-900 shadow-inner">
+        <div className="max-w-6xl mx-auto relative z-10">
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
             Our Instructors
           </h1>
-        </div>
-        <div className="block text-center">
-          <p className="text-customFontColorBlack md:text-xl sm:text-4xl font-semibold">
-            Meet Tutor Trek Subject Experts
+          <p className="mt-2 text-slate-400 text-sm md:text-base font-light">
+            Meet TutorTrek subject experts and learn from veteran industry software engineers.
           </p>
         </div>
       </div>
-      <div>
-        <div className="flex p-3 bg-white justify-center">
-          <div className="p-5 flex md:w-4/12 w-full gap-x-1">
+
+      {/* Filter and Search Bar Container */}
+      <div className="max-w-6xl mx-auto px-4 mt-8 relative z-10">
+        <div className="bg-slate-900/40 p-4 rounded-2xl border border-slate-900 shadow-lg shadow-black/20 backdrop-blur-md flex flex-col md:flex-row gap-4 items-center justify-between">
+          <div className="w-full md:w-1/3">
             <FilterInstructorSelectBox handleSelect={handleSelect} />
-            <div className="relative flex-1 mt-2">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={handleSearchInputChange}
-                className="p-2 pr-8 border rounded-md border-gray-300 focus:outline-none focus:border-blue-500 h-10 w-full"
-                placeholder="Search..."
-              />  
-              <div  className="absolute top-5 right-3 transform -translate-y-1/2 text-gray-400 cursor-pointer">
-                <RiSearchLine size={20} />
-              </div>
-            </div>
+          </div>
+          
+          <div className="relative w-full md:w-1/2">
+            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <RiSearchLine size={20} />
+            </span>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchInputChange}
+              className="w-full pl-11 pr-4 py-3 text-sm rounded-xl border border-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-[#090d16]/80 text-slate-100 placeholder-slate-500"
+              placeholder="Search instructors by name..."
+            />
           </div>
         </div>
-        <div className="p-10 flex items-center gap-y-10 bg-gray-50 justify-evenly flex-wrap">
+      </div>
+
+      {/* Instructors Card Grid */}
+      <div className="max-w-6xl mx-auto px-4 mt-10 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
           {isSearchLoading ? (
-            <Spinner color="blue-gray" className="h-8 w-8" />
+            <div className="col-span-full py-12">
+              <Spinner color="indigo" className="h-8 w-8" />
+            </div>
           ) : filteredAndSearchedInstructors?.length ? (
             filteredAndSearchedInstructors?.map((instructor) => (
-              <Link key={instructor._id} to={`/tutors/${instructor._id}`}>
+              <Link 
+                key={instructor._id} 
+                to={`/tutors/${instructor._id}`}
+                className="block transition-transform duration-200 hover:-translate-y-1.5 h-full w-full max-w-[22rem]"
+              >
                 <InstructorCard {...instructor} />
               </Link>
             ))
           ) : (
-            <div className="p-3 text-customFontColorBlack font-light">
-              No results found.
+            <div className="col-span-full bg-slate-900/30 p-12 rounded-2xl border border-slate-900 text-center max-w-md mx-auto mt-6 backdrop-blur-sm">
+              <p className="text-slate-400 text-sm font-light">
+                No instructors match the search filters. Try resetting search criteria.
+              </p>
             </div>
           )}
         </div>
       </div>
     </div>
   );
-
 };
 
 export default ListAllInstructors;

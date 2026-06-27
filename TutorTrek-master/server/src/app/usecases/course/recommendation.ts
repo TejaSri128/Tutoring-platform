@@ -21,10 +21,14 @@ export const getRecommendedCourseByStudentU = async (
     courses.map(async (course) => {
       course.media={thumbnailUrl:"",profileUrl:""}
       if (course.course) {
-        course.media.thumbnailUrl = await cloudService.getFile(course.course.thumbnailKey);
+        course.media.thumbnailUrl = await cloudService.getFile(
+          course.course.thumbnailKey ?? course.course.thumbnailUrl ?? ''
+        );
       }
       if (course.instructor) {
-        course.media.profileUrl = await cloudService.getFile(course.instructor.profileKey);
+        course.media.profileUrl = await cloudService.getFile(
+          course.instructor.profileKey ?? course.instructor.profileUrl ?? ''
+        );
       }
     })
   );
@@ -40,10 +44,14 @@ export const getTrendingCourseU = async (
   await Promise.all(
     courses.map(async (course) => {
       if (course.thumbnail) {
-        course.thumbnailUrl = await cloudService.getFile(course.thumbnail.key);
+        course.thumbnailUrl = await cloudService.getFile(
+          course.thumbnail.key ?? course.thumbnail.url ?? ''
+        );
       }
       if (course.instructorProfile) {
-        course.profileUrl = await cloudService.getFile(course.instructorProfile.key);
+        course.profileUrl = await cloudService.getFile(
+          course.instructorProfile.key ?? course.instructorProfile.url ?? ''
+        );
       }
     })
   );

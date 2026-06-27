@@ -98,14 +98,16 @@ export const courseRepositoryMongodb = () => {
           course: {
             _id: '$courses._id',
             name: '$courses.title',
-            thumbnailKey: '$courses.thumbnail.key'
+            thumbnailKey: '$courses.thumbnail.key',
+            thumbnailUrl: '$courses.thumbnail.url'
           },
           instructor: {
             _id: '$instructor._id',
             firstName: '$instructor.firstName',
             lastName: '$instructor.lastName',
             email: '$instructor.email',
-            profileKey: '$instructor.profilePic.key'
+            profileKey: '$instructor.profilePic.key',
+            profileUrl: '$instructor.profilePic.url'
           }
         }
       }

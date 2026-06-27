@@ -93,3 +93,22 @@ export const searchCourseService = async (
   );
   return response.data;
 };
+
+export const rateCourseService = async (
+  courseId: string,
+  rating: number,
+  reviewText: string
+) => {
+  const response = await api.post(
+    `${CONFIG_KEYS.API_BASE_URL}/courses/get-course/${courseId}/rate`,
+    { rating, reviewText }
+  );
+  return response.data;
+};
+
+export const getCourseReviewsService = async (courseId: string) => {
+  const response = await axiosInstance.get(
+    `${CONFIG_KEYS.API_BASE_URL}/courses/get-course/${courseId}/reviews`
+  );
+  return response.data;
+};

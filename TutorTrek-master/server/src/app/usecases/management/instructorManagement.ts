@@ -76,7 +76,7 @@ export const getAllInstructors = async (
     instructors.map(async (instructor) => {
       if (instructor.profilePic) {
         instructor.profileUrl = await cloudService.getFile(
-          instructor.profilePic.key ?? ''
+          instructor.profilePic.key ?? instructor.profilePic.url ?? ''
         );
       }
     })
@@ -122,7 +122,7 @@ export const getBlockedInstructors = async (
     blockedInstructors.map(async (instructor) => {
       if (instructor.profilePic) {
         instructor.profileUrl = await cloudService.getFile(
-          instructor.profilePic.key ?? ''
+          instructor.profilePic.key ?? instructor.profilePic.url ?? ''
         );
       }
     })
@@ -139,8 +139,10 @@ export const getInstructorByIdUseCase = async (
     throw new AppError('Invalid instructor id', HttpStatusCodes.BAD_REQUEST);
   }
   const instructor = await instructorRepository.getInstructorById(instructorId);
-  if (instructor?.profilePic.key) {
-    const profilePic = await cloudService.getFile(instructor?.profilePic.key);
+  if (instructor?.profilePic) {
+    const profilePic = await cloudService.getFile(
+      instructor.profilePic.key ?? instructor.profilePic.url ?? ''
+    );
     instructor.profileUrl = profilePic;
   }
   if (instructor) {

@@ -9,20 +9,26 @@ const stripe = new Stripe(configKeys.STRIPE_SECRET_KEY || '', {
 });
 
 export const paymentService = () => {
-  const createPaymentIntent = async (amount:number) => {
+  const createPaymentIntent = async (amount: number, courseId: string, studentId: string) => {
     const paymentIntent = await stripe.paymentIntents.create({
       currency: 'INR',
       amount: amount*100,
-      automatic_payment_methods: { enabled: true }
+      automatic_payment_methods: { enabled: true },
+      metadata: { courseId, studentId }
     });
     return paymentIntent;
   };
 
   const getConfig = () => configKeys.STRIPE_PUBLISHABLE_KEY;
 
+  const verifyWebhookSignature = (rawBody: any, signature: string) => {
+    return stripe.webhooks.constructEvent(rawBody, signature, configKeys.STRIPE_WEBHOOK_SECRET || '');
+  };
+
   return {
     createPaymentIntent,
-    getConfig
+    getConfig,
+    verifyWebhookSignature
   };
 };
 

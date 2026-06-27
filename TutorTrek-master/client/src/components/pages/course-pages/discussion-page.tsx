@@ -9,8 +9,11 @@ import { getDiscussionsByLesson } from "../../../api/endpoints/course/discussion
 import { ApiResponseDiscussion } from "../../../api/types/apiResponses/api-response-discussion";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../../../redux/reducers/authSlice";
+import useSocket from "../../../hooks/useSocket";
+import { useParams } from "react-router-dom";
 
 const Discussion: React.FC<{ lessonId: string }> = ({ lessonId }) => {
+  const { courseId } = useParams();
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const [discussionText, setDiscussionText] = useState("");
   const [discussions, setDiscussions] = useState<
@@ -20,6 +23,19 @@ const Discussion: React.FC<{ lessonId: string }> = ({ lessonId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [updated, setUpdated] = useState(false);
   const [visibleCount, setVisibleCount] = useState(3);
+  const socket = useSocket(courseId);
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("discussion_updated", () => {
+      if (lessonId) {
+        fetchDiscussions(lessonId);
+      }
+    });
+    return () => {
+      socket.off("discussion_updated");
+    };
+  }, [socket, lessonId]);
 
   const handlePostDiscussion = async () => {
     try {

@@ -47,7 +47,9 @@ const configKeys = {
 
   DB_CLUSTER_URL:process.env.DB_CLUSTER_URL as string,
 
-  REDIS_URL:process.env.REDIS_URL as string
+  REDIS_URL:process.env.REDIS_URL as string,
+
+  STRIPE_WEBHOOK_SECRET:process.env.STRIPE_WEBHOOK_SECRET as string
 
 };
 

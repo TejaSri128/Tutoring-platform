@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, Fragment } from "react";
 import {
   Button,
   Dialog,
@@ -7,9 +7,8 @@ import {
   DialogFooter,
   Typography,
 } from "@material-tailwind/react";
-import { useNavigate, useParams } from "react-router-dom";
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
-import { formatToINR, formatTime } from "../../../utils/helpers";
+import { useParams } from "react-router-dom";
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { enrollStudent } from "../../../api/endpoints/course/course";
 import { toast } from "react-toastify";
 import { FaSpinner } from "react-icons/fa";
@@ -19,6 +18,7 @@ interface PaymentModalProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setUpdated: () => void;
   courseDetails: {
+    title?: string;
     price: number;
     overview: string;
     isPaid: boolean;
@@ -34,13 +34,9 @@ const PaymentConfirmationModal: React.FC<PaymentModalProps> = ({
   const handleOpen = () => setOpen((cur) => !cur);
   const { courseId } = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
   const handleClose = () => setOpen(false);
-  const offerExpiration = "2023-08-13T22:59:59.000Z";
 
-  const [timeLeft, setTimeLeft] = useState<number>(0);
-
-  const handleConfirmPayment = async () => {
+  const handleCourseEnroll = async () => {
     try {
       setIsLoading(true);
       const response = await enrollStudent(courseId ?? "");
@@ -48,10 +44,10 @@ const PaymentConfirmationModal: React.FC<PaymentModalProps> = ({
         setUpdated();
         setIsLoading(false);
         setOpen(false);
-        toast.success(response?.message, {
+        toast.success(response?.message || "Successfully enrolled into the course", {
           position: toast.POSITION.BOTTOM_RIGHT,
         });
-      }, 3000);
+      }, 2000);
     } catch (error) {
       setIsLoading(false);
       toast.error("Something went wrong ", {
@@ -60,109 +56,75 @@ const PaymentConfirmationModal: React.FC<PaymentModalProps> = ({
     }
   };
 
-  const handleCourseEnroll = () => {
-    if (courseDetails.isPaid) {
-      navigate(`/courses/${courseId}/payment`);
-    } else {
-      handleConfirmPayment();
-    }
-  };
-  const isFreeCourse = courseDetails?.isPaid === false;
-
-  useEffect(() => {
-    if (!isFreeCourse) {
-      const offerEndTime = new Date(offerExpiration).getTime();
-      const currentTime = new Date().getTime();
-
-      const timeRemaining = offerEndTime - currentTime;
-      setTimeLeft(timeRemaining);
-
-      const timer = setInterval(() => {
-        setTimeLeft((prevTime) => (prevTime > 1000 ? prevTime - 1000 : 0));
-      }, 1000);
-
-      return () => {
-        clearInterval(timer);
-      };
-    }
-  }, [isFreeCourse, offerExpiration]);
-
   return (
     <Fragment>
-      <Dialog open={open} size='sm' handler={handleOpen}>
-        <DialogHeader>
-          <div className='flex items-center justify-center'>
-            <ExclamationCircleIcon className='h-8 w-8 text-yellow-500' />
+      <Dialog 
+        open={open} 
+        size='sm' 
+        handler={handleOpen}
+        className="bg-[#090d16] border border-slate-800 text-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in"
+      >
+        <DialogHeader className="border-b border-slate-800/50 pb-4">
+          <div className='flex items-center space-x-3 text-indigo-400'>
+            <CheckCircleIcon className='h-7 w-7' />
             <Typography
               variant='h5'
-              color='gray'
-              className='ml-2 font-semibold'
+              className='font-bold tracking-tight text-white'
             >
-              {isFreeCourse
-                ? "Explore Your Free Learning Adventure"
-                : "Payment Confirmation"}
+              Confirm Enrollment
             </Typography>
           </div>
         </DialogHeader>
-        <DialogBody divider>
-          <Typography variant='paragraph' className='font-semibold text-md' color='gray'>
-            Please review the details before proceeding:
-          </Typography>
-          <Typography variant='paragraph' color='gray' className='mt-2 mb-1'>
-            {isFreeCourse ? (
-              <span className='font-semibold text-green-500'>
-                This course is free!
-              </span>
-            ) : (
-              <div className="bg-gray-100 p-2">
-              <p className="text-lg font-semibold mb-2">🎉 Limited Time Offer 🎉</p>
-              <p className="text-xl font-bold mb-2">
-                Price:{" "}
-                <span className="text-green-600">
-                  {formatToINR(courseDetails?.price)}
-                </span>{" "}
-                <span className="text-gray-600 line-through">
-                  {formatToINR(courseDetails?.price + 100)}
-                </span>
-              </p>
-              <p className="text-lg">
-                Offer Expires in: 
-                <span className="text-gray-600 font-semibold">
-                  {formatTime(timeLeft)}
-                </span>
-              </p>
+        <DialogBody className="text-slate-300 py-6">
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <Typography className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">
+                Course
+              </Typography>
+              <Typography className="text-lg font-bold text-white leading-snug">
+                {courseDetails?.title || "Course Details"}
+              </Typography>
             </div>
-                    
-            )}
-          </Typography>
-          <Typography variant='paragraph' color='gray'>
-            <span className='font-semibold'>Course Overview:</span><br />
-            {courseDetails?.overview}
-          </Typography>
+            
+            <div className="bg-[#0c1220]/50 p-4 rounded-xl border border-slate-800/40">
+              <Typography className="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-1">
+                Overview
+              </Typography>
+              <Typography className="text-sm text-slate-300 leading-relaxed max-h-40 overflow-y-auto pr-1">
+                {courseDetails?.overview}
+              </Typography>
+            </div>
+
+            <div className="flex items-center justify-between p-3.5 bg-emerald-950/20 rounded-xl border border-emerald-900/30 text-emerald-400">
+              <span className="text-sm font-medium">Pricing Plan</span>
+              <span className="text-sm font-extrabold uppercase tracking-wider bg-emerald-400/10 px-2.5 py-0.5 rounded-lg border border-emerald-400/20">
+                Free
+              </span>
+            </div>
+          </div>
         </DialogBody>
-        <DialogFooter>
+        <DialogFooter className="border-t border-slate-800/50 pt-4 flex flex-col gap-2">
           <Button  
             variant='gradient'
-            color='green'
+            className='w-full from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-600/20 transition-all duration-200 flex items-center justify-center'
             onClick={handleCourseEnroll}
-            className='w-full'
+            disabled={isLoading}
           >
             {isLoading ? (
-              <span className='flex items-center'>
-                <span>Processing...</span>
-                <FaSpinner className='animate-spin ml-1' size={20} />
+              <span className='flex items-center space-x-2'>
+                <span>Enrolling...</span>
+                <FaSpinner className='animate-spin' size={18} />
               </span>
             ) : (
-              <span>{isFreeCourse ? "Start Course" : "Confirm Payment"}</span>
+              <span>Confirm & Start Learning</span>
             )}
           </Button>
           <Button
-            variant='outlined'
-            color='blue'
+            variant='text'
             onClick={handleClose}
-            className='w-full mt-2'
+            className='w-full text-slate-400 hover:text-white hover:bg-slate-800/20 font-medium py-3 rounded-xl transition-all duration-200'
           >
-            <span>Cancel</span>
+            Cancel
           </Button>
         </DialogFooter>
       </Dialog>

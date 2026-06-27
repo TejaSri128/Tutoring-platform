@@ -27,7 +27,7 @@ const ListCourse: React.FC = () => {
         setIsLoading(false);
       }, 1000);
     } catch (error: any) {
-      toast.error(error?.data?.message, {
+      toast.error(error?.data?.message || "Something went wrong", {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
       setIsLoading(false);
@@ -39,7 +39,6 @@ const ListCourse: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    console.log(searchQuery)
     const debouncedHandleCourseSearch = debounce(async () => {
       if (searchQuery.trim() !== "") {
         try {  
@@ -79,33 +78,20 @@ const ListCourse: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className='text-customFontColorBlack  '>
-        <div className='pt-5 pb-5 pl-9 pr-9 mt-5 mx-auto flex justify-center'>
-          <div className='w-10/12 ml-2 pl-1 animate-pulse'>
-            <h1 className='text-3xl font-bold bg-gradient-to-r from-gray-300 to-gray-100 h-8 rounded'></h1>
-            <p className='text-gray-700 mt-2 bg-gradient-to-r from-gray-300 to-gray-100 h-4 rounded'></p>
+      <div className="bg-[#090d16] min-h-screen text-slate-100">
+        <div className="bg-gradient-to-r from-[#090d16] via-slate-900 to-indigo-950 text-white py-14 px-6 border-b border-slate-900">
+          <div className="max-w-6xl mx-auto space-y-3 animate-pulse">
+            <div className="h-8 w-80 bg-slate-900 rounded-lg" />
+            <div className="h-4 w-96 bg-slate-900 rounded-lg" />
           </div>
         </div>
-        <div className='mx-auto pl-10 pr-10  flex justify-center'>
-          <div className='w-10/12 pl-1 border-b-gray-100 border-b-2 mx-auto animate-pulse'>
-            <div className='flex flex-wrap'>
-              <div className='text-gray-900 rounded-lg px-2 py-2 mr-2 mb-2 cursor-pointer bg-gradient-to-r from-gray-300 to-gray-100 h-8 w-16'></div>
-              <div className='text-gray-900 rounded-lg px-4 py-2 mr-2 mb-2 cursor-pointer bg-gradient-to-r from-gray-300 to-gray-100 h-8 w-24'></div>
-              <div className='text-gray-900 rounded-lg px-4 py-2 mr-2 mb-2 cursor-pointer bg-gradient-to-r from-gray-300 to-gray-100 h-8 w-20'></div>
-              <div className='text-gray-900 rounded-lg px-4 py-2 mr-2 mb-2 cursor-pointer bg-gradient-to-r from-gray-300 to-gray-100 h-8 w-24'></div>
-            </div>
-          </div>
-        </div>
-
-        <div className=' mx-auto flex justify-center'>
-          <div className='w-10/12 '>
-            <div className='flex mt-3 flex-wrap justify-center'>
-              {[...Array(8)].map((_, index) => (
-                <div className='m-2 py-3' key={index}>
-                  <ShimmerCard />
-                </div>
-              ))}
-            </div>
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="flex flex-wrap gap-6 justify-center">
+            {[...Array(8)].map((_, index) => (
+              <div className="m-2 bg-slate-900/50 rounded-2xl p-4 border border-slate-900/50" key={index}>
+                <ShimmerCard />
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -113,59 +99,71 @@ const ListCourse: React.FC = () => {
   }
 
   return (
-    <div className='text-customFontColorBlack'>
-      <div className='pt-5 pb-5 pl-9 pr-9 mt-5 mx-auto flex justify-center'>
-        <div className='w-10/12 ml-2 pl-1'>
-          <h1 className='text-2xl lg:text-3xl font-bold'>
-            A broad selection of courses
+    <div className="bg-[#090d16] min-h-screen text-slate-100 pb-16 font-sans relative overflow-hidden">
+      {/* Background blurs */}
+      <div className="absolute top-80 left-0 w-80 h-80 bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[40rem] right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+      {/* Page Header */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-[#090d16] via-slate-900 to-indigo-950 text-white py-14 px-6 border-b border-slate-900 shadow-inner">
+        <div className="max-w-6xl mx-auto relative z-10">
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+            Explore Tech Courses
           </h1>
-          <p className='text-gray-700 md:text-lg sm:text-xs'>
-            Choose from over {courses?.length} online video courses with new
-            additions published every month
+          <p className="mt-2 text-slate-400 text-sm md:text-base font-light">
+            Choose from over {courses?.length} developer courses to acquire practical programming skills.
           </p>
         </div>
       </div>
-      <div className='flex p-3 bg-gray-50 justify-center'>
-        <div className='p-5 flex flex-col md:flex-row  md:w-8/12 lg:w-6/12 gap-x-5 w-full'>
-          <FilterCoursesSelectBox handleSelect={handleSelect} />
-          <div className='relative w-full mt-2 p-2  md:w-1/2'>
+
+      {/* Filter and Search Bar Container */}
+      <div className="max-w-6xl mx-auto px-4 mt-8 relative z-10">
+        <div className="bg-slate-900/40 p-4 rounded-2xl border border-slate-900 shadow-lg shadow-black/20 backdrop-blur-md flex flex-col md:flex-row gap-4 items-center justify-between">
+          <div className="w-full md:w-1/3">
+            <FilterCoursesSelectBox handleSelect={handleSelect} />
+          </div>
+          
+          <div className="relative w-full md:w-1/2">
+            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <RiSearchLine size={20} />
+            </span>
             <input
-              type='text'
+              type="text"
               value={searchQuery}
               onChange={handleSearchInputChange}
-              className='p-1.5 pr-8 border rounded-md  border-gray-400 focus:outline-none focus:border-blue-500 h-10 w-full'
-              placeholder='Search Courses...'
+              className="w-full pl-11 pr-4 py-3 text-sm rounded-xl border border-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-[#090d16]/80 text-slate-100 placeholder-slate-500"
+              placeholder="Search by category, course name, or key..."
             />
-            <div className='absolute top-7 right-4 transform -translate-y-1/2 text-gray-400 cursor-pointer'>
-              <RiSearchLine size={24} />
-            </div>
           </div>
         </div>
       </div>
-      <div className='mx-auto flex justify-center'>
-        <div className='w-10/12'>
-          <div className='flex mt-3  flex-wrap justify-center'>
-            {courses.length ? (
-              courses?.map((course: CourseInterface, index: number) => (
-                <Link to={course._id} key={course._id} className='mt-5'>
-                  <div className='m-2'>
-                    <CourseCard {...course} />
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <div className='text-center pt-8 pb-14 mt-8'>
-                <MdSentimentDissatisfied
-                  className='mx-auto text-gray-500 mb-4'
-                  size={58}
-                />
-                <p className='text-gray-500 text-lg'>
-                  No results found for the search query.
-                </p>
-              </div>
-            )}
+
+      {/* Course Grid */}
+      <div className="max-w-6xl mx-auto px-4 mt-10 relative z-10">
+        {courses.length ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+            {courses.map((course: CourseInterface) => (
+              <Link 
+                to={course._id} 
+                key={course._id}
+                className="block transition-transform duration-200 hover:-translate-y-1.5 h-full w-full max-w-[18.5rem]"
+              >
+                <CourseCard {...course} />
+              </Link>
+            ))}
           </div>
-        </div>
+        ) : (
+          <div className="bg-slate-900/30 p-12 rounded-2xl border border-slate-900 text-center max-w-md mx-auto mt-12 backdrop-blur-sm">
+            <MdSentimentDissatisfied
+              className="mx-auto text-slate-600 mb-4"
+              size={58}
+            />
+            <h3 className="text-slate-200 font-bold text-lg">No courses found</h3>
+            <p className="text-slate-400 text-sm mt-2 font-light">
+              We couldn't locate any matching tech courses. Try typing another search query.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

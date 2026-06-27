@@ -1,6 +1,6 @@
+import React from "react";
 import {
   Card,
-  CardHeader,
   CardBody,
   Typography,
   Avatar,
@@ -10,7 +10,6 @@ import { InstructorApiResponse } from "../../../api/types/apiResponses/api-respo
 const InstructorCard: React.FC<InstructorApiResponse> = ({
   firstName,
   lastName,
-  email,
   subjects,
   qualification,
   skills,
@@ -18,39 +17,64 @@ const InstructorCard: React.FC<InstructorApiResponse> = ({
   about,
 }) => {
   return (
-    <Card
-      shadow={false}
-      className='relative grid h-[24rem] w-[24rem] shadow-md cursor-pointer border-gray-200 text-customFontColorBlack max-w-[23rem] items-end justify-center overflow-hidden text-center'
-    >
-      <CardHeader
-        floated={false}
-        shadow={false}
-        color='transparent'
-        className='absolute pt-16 inset-0 m-0  w-full rounded-none bg-cover bg-center'
-      >
+    <Card className="group w-full bg-slate-900/50 hover:bg-slate-900 rounded-2xl border border-slate-900 hover:border-indigo-500/30 shadow-md transition-all duration-300 overflow-hidden flex flex-col h-[26rem]">
+      {/* Decorative Gradient Header Band */}
+      <div className="h-24 w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-700 relative">
+        <div className="absolute inset-0 bg-black/20" />
+      </div>
+
+      {/* Avatar Container positioned overlapping the header band */}
+      <div className="relative flex justify-center -mt-12">
         <Avatar
-          size='xxl'
-          variant='circular'
-          alt='tania andrew'  
-          className='border-2 border-white'
-          src={profileUrl??"https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"}
+          size="xxl"
+          variant="circular"
+          alt={`${firstName} ${lastName}`}
+          className="h-24 w-24 border-4 border-slate-900 shadow-md transition-transform duration-300 group-hover:scale-105 object-cover"
+          src={profileUrl || "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150"}
         />
-        <Typography variant='h5' className='mb-4'>
-          {firstName + " " + lastName}
-        </Typography>
-        <p className="text-gray pl-2 pr-2  text-md line-clamp-2">{about}</p>
-      </CardHeader>
-      <CardBody
-        className='relative  px-6 md:px-12'
-        style={{ height: "calc(100% - 16rem)" }}
-      >
-        <Typography
-          variant='h6'
-          color='black'
-          className='mb-6 text-gray text-md leading-[1.5]'
-        >
-          {skills+", "+subjects},
-        </Typography>  
+      </div>
+
+      {/* Profile Details Content */}
+      <CardBody className="p-6 flex-1 flex flex-col justify-between text-center pt-3">
+        <div>
+          {/* Name */}
+          <Typography variant="h5" className="text-white font-extrabold text-lg tracking-tight">
+            {firstName + " " + lastName}
+          </Typography>
+          
+          {/* Qualification */}
+          <p className="text-indigo-400 text-xs font-semibold mt-1">
+            {qualification}
+          </p>
+
+          {/* About description line clamped */}
+          <p className="text-slate-400 text-xs mt-3 line-clamp-3 leading-relaxed px-1 font-light">
+            {about}
+          </p>
+        </div>
+
+        <div>
+          {/* Divider */}
+          <div className="w-full h-px bg-[#06090f] my-4" />
+
+          {/* Subjects and Skills Pills */}
+          <div className="space-y-2">
+            <div className="flex flex-wrap gap-1 justify-center">
+              {subjects.map((subject, idx) => (
+                <span 
+                  key={idx} 
+                  className="text-[10px] font-bold text-slate-350 bg-slate-800 px-2.5 py-0.5 rounded-md"
+                >
+                  {subject}
+                </span>
+              ))}
+            </div>
+            
+            <p className="text-slate-500 text-[10px] font-medium line-clamp-1">
+              Skills: {skills}
+            </p>
+          </div>
+        </div>
       </CardBody>
     </Card>
   );

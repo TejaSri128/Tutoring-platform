@@ -30,38 +30,39 @@ const MyCourses: React.FC = (props: Props) => {
   }, []);
 
   return (
-    <div className='w-full flex justify-center items-center  '>
+    <div className='w-full flex justify-center items-center py-6 bg-[#090d16] text-slate-100 font-sans'>
       <div className='w-11/12 '>
         <div>
-          <div className='pt-5 pb-2 w-full'>
-            <h2 className='text-3xl font-semibold text-customFontColorBlack'>
+          <div className='pt-5 pb-2 w-full border-b border-slate-900 mb-6'>
+            <h2 className='text-3xl font-extrabold tracking-tight text-white'>
               Watch Courses
             </h2>
           </div>
-          <div className='mb-2 pt-3'>
-            <h5 className='text-customFontColorBlack font-semibold'>
-              MY COURSES
+          <div className='mb-4'>
+            <h5 className='text-indigo-400 font-extrabold uppercase tracking-wider text-xs'>
+              My Courses
             </h5>
           </div>
         </div>
         <div className='flex gap-x-10 h-full pb-10'>
-          <div className=' w-full h-full   bg-white rounded-md '>
-            <div className='flex pt-10  pb-10 flex-wrap border border-gray-300 rounded-md items-center bg-white  justify-center gap-x-10 gap-y-5 '>
+          <div className='w-full h-full bg-transparent'>
+            <div className='flex pt-8 pb-12 flex-wrap border border-slate-900 rounded-3xl items-center bg-slate-900/40 backdrop-blur-md justify-center gap-x-8 gap-y-8 shadow-2xl shadow-black/35 relative overflow-hidden'>
+              <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
               {loading ? (
                 Array.from({ length: 3 }).map((_, index) => {
                   return <ProfileCardShimmer key={index} />;
                 })
               ) : courses?.length ? (
                 courses.map((course) => (
-                  <Link to={`/courses/${course._id}`} key={course._id}>
+                  <Link to={`/courses/${course._id}`} key={course._id} className="block transition-transform duration-200">
                     <MyCourseCard {...course} />
                   </Link>
                 ))
               ) : (
-                <div className='text-center'>
-                  Please enroll into a course.{" "}
-                  <Link to='/courses' className='text-blue-500 underline'>
-                    View available courses
+                <div className='text-center text-slate-400 font-light py-8 space-y-2 relative z-10'>
+                  <p>You have not enrolled in any courses yet.</p>
+                  <Link to='/courses' className='text-indigo-400 hover:text-indigo-300 font-medium underline transition-colors'>
+                    Browse Available Courses
                   </Link>
                 </div>
               )}

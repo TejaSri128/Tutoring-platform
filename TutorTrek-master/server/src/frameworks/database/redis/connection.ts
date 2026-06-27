@@ -11,6 +11,12 @@ const connection = () => {
         set: async (key: string, value: string) => {
           store.set(key, value);
         },
+        setEx: async (key: string, expireTimeSec: number, value: string) => {
+          store.set(key, value);
+          setTimeout(() => {
+            store.delete(key);
+          }, expireTimeSec * 1000);
+        },
         del: async (key: string) => {
           store.delete(key);
         }
